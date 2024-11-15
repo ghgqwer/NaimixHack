@@ -36,6 +36,15 @@ type Auth_data struct{
 	Corporation Corporation_data
 }
 
+
+
+
+type Seraching_page_data struct{
+		Employees []User
+}
+
+
+
 type User struct{
    Id, Firstname, Surname,Secondname, Email, Password, Date_birth_day, Time_birth, City_of_birth, Work_experience string
    Is_that_authorized_user bool
@@ -82,8 +91,13 @@ func populateUserFromSession(r *http.Request, sessionName string) (Auth_data, er
 
 
     }
+		user2 := Corporation_data{
+  			Id:                    getSessionValueAsString(session, "Id_corporation"),
+		}
+
 		var auth_data Auth_data
 		auth_data.Employee = user
+		auth_data.Corporation = user2
     return auth_data, nil
 }
 
@@ -94,6 +108,9 @@ func saveUserToSession(r *http.Request, w http.ResponseWriter, sessionName strin
     if err != nil {
         return err
     }
+
+
+		session.Values["Id_corporation"] = user.Corporation.Id
 
 
     session.Values["Curret_user_id"] = user.Employee.Id
@@ -128,13 +145,13 @@ func  get_user_employee_by_id(id string) (User){
 	defer db.Close()
 
 
-	var zapros = fmt.Sprintf("SELECT  firstname, secondname, surname, Work_experience, City_of_birth, Time_birth, Date_birth_day FROM `users` WHERE id = %s", id)
+	var zapros = fmt.Sprintf("SELECT id, firstname, secondname, surname, Work_experience, City_of_birth, Time_birth, Date_birth_day FROM `users` WHERE id = %s", id)
 	res,_ := db.Query(zapros)
 	fmt.Println(zapros)
 	var user User
 
 	for res.Next(){
-		err = res.Scan( &user.Firstname,&user.Secondname,&user.Surname, &user.Work_experience,  &user.City_of_birth,  &user.Time_birth, &user.Date_birth_day)
+		err = res.Scan(&user.Id, &user.Firstname,&user.Secondname,&user.Surname, &user.Work_experience,  &user.City_of_birth,  &user.Time_birth, &user.Date_birth_day)
 	}
 	return user
 }
@@ -401,6 +418,83 @@ func corporation_authorization_page(w http.ResponseWriter, r *http.Request){
 }
 
 
+
+
+func search_employees_page (w http.ResponseWriter, r *http.Request){
+	t, err := template.ParseFiles("../frontend/templates/search_employees_page.html", "../frontend/templates/header.html", "../frontend/templates/footer.html")
+
+	var data Seraching_page_data
+	if err != nil{
+		fmt.Fprintf(w, err.Error())
+	}
+	db, err := sql.Open("mysql", adress_data_base_test)
+	if err != nil{
+		panic(err)
+	}
+	defer db.Close()
+
+
+	var zapros = fmt.Sprintf("SELECT id FROM `users`")
+	res,_ := db.Query(zapros)
+	fmt.Println(zapros)
+	var user User
+
+	for res.Next(){
+		err = res.Scan(&user.Id)
+		fmt.Print("This:   ")
+		fmt.Println(user.Id)
+
+		user = get_user_employee_by_id(user.Id)
+
+		data.Employees = append(data.Employees, user)
+		fmt.Print("This:   ")
+		fmt.Println(user.Id)
+	}
+
+	fmt.Println("55")
+	fmt.Println(data.Employees)
+	t.ExecuteTemplate(w, "search_employees_page", data)
+
+
+}
+
+
+
+func add_employee_to_your_company(w http.ResponseWriter, r *http.Request){
+
+	vars := mux.Vars(r)
+  w.WriteHeader(http.StatusOK)
+//  fmt.Fprintf(w, "Category: %v\n", vars["id_user"])
+  var current_employee_id = vars["id_employee"]
+
+	fmt.Println()
+
+	authorized_user, _  := populateUserFromSession(r, sessionName)
+	authorized_user.Corporation = get_user_corporation_by_id(authorized_user.Corporation.Id)
+
+
+
+	db, err := sql.Open("mysql", adress_data_base_test)
+	if err != nil{
+		panic(err)
+	}
+	defer db.Close()
+	result, err := db.Exec("insert into naimix.Employees_of_companies ( `id_employee`,	`id_company`) values (?, ?)",current_employee_id, authorized_user.Corporation.Id)
+
+	fmt.Println(result)
+	if(err != nil){
+		fmt.Println(err)
+	}
+
+
+	fmt.Println(authorized_user.Corporation)
+
+
+
+}
+
+
+
 func main() {
 
 	store.Options = &sessions.Options{
@@ -425,7 +519,11 @@ func main() {
 	r.HandleFunc("/corporation_registration_page", corporation_registration_page)
 	r.HandleFunc("/corporation_authorization_page", corporation_authorization_page)
 	r.HandleFunc("/corporation_profile/{id_corporation}", corporation_profile)
+	r.HandleFunc("/search_employees_page", search_employees_page)
 
+
+
+	r.HandleFunc("/add_employee_to_your_company/{id_employee}", add_employee_to_your_company)
 
 
   http.Handle ("/", r)

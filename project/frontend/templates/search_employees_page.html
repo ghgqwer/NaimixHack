@@ -1,0 +1,19 @@
+
+{{define "search_employees_page"}}
+
+{{template "header" .}}
+  <div class="row">
+    <div class="col-12">
+      Поиск сотрудников
+    </div>
+      {{range .Employees}}
+        <div class="col-12">
+          <a href="/add_employee_to_your_company/{{.Id}}">
+            {{.Firstname}} {{.Id}}
+          </a>
+        </div>
+      {{end}}
+
+  </div>
+{{template "footer"}}
+{{end}}
