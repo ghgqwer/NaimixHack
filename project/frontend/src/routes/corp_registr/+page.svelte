@@ -1,0 +1,110 @@
+<script>
+
+	import { goto } from "$app/navigation";
+
+</script>
+
+  
+<div class="main">
+    <form class="registration-form">
+        <h2 class="name">Регистрация для компании</h2>
+        
+        <div class="form-group">
+          <label for="firstName">Название компании</label>
+          <input type="text" id="company" name="company" required placeholder="Введите имя">
+        </div>
+    
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="Введите email">
+        </div>
+    
+        <div class="form-group">
+          <label for="password">Пароль</label>
+          <input type="password" id="password" name="password" required placeholder="Введите пароль">
+        </div>
+    
+        <button type="submit" class="submit-button" on:click={() => goto("../main")}>Зарегистрироваться</button>
+      </form>
+</div>
+  
+
+
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+
+    .main{
+        display: flex;
+        justify-content: center;
+    }
+
+    .registration-form {
+    font-size: 15px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+
+    .registration-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color:#0E6666;
+      outline: none;
+    }
+
+    .form-group small {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .submit-button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #FF9929;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .name {
+        margin: 0;
+    }
+  </style>
