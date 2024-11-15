@@ -106,7 +106,7 @@ func getSessionValueAsBool(session *sessions.Session, key string) bool {
 }
 
 func home_page(w http.ResponseWriter, r *http.Request){
-      t, err := template.ParseFiles("../templates/index.html", "../templates/header.html", "../templates/footer.html")
+      t, err := template.ParseFiles("../frontend/templates/index.html", "../frontend/templates/header.html", "../frontend/templates/footer.html")
       if err != nil{
         fmt.Fprintf(w, err.Error())
 
