@@ -1,0 +1,44 @@
+
+{{define "corporation_registration_page"}}
+
+{{template "header" .}}
+
+      <div class="row">
+        <div class="col-12 center_text_in_div">
+          <h1> Регистрация </h1>
+        </div>
+
+
+        <form action="/corporation_registration_page" method="post">
+          <div class="col-12">
+            <input type ="text" name="name" id="name" placeholder="Введите имя"
+            class="form-control">
+          </div>
+
+          <div class="col-12">
+            <input type ="text" name="email" id="email" placeholder="email"
+            class="form-control">
+          </div>
+
+          <div class="col-12">
+            <input type ="text" name="password" id="password" placeholder="password"
+            class="form-control">
+          </div>
+
+
+
+
+
+
+
+
+          <div class="col-12">
+            <button class="btn btn-warning">Добавить</button>
+          </div>
+        </form>
+
+      </div>
+
+{{template "footer"}}
+
+{{end}}
