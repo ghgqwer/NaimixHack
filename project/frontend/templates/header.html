@@ -16,6 +16,79 @@
 
 </head>
 <body>
+  <header class="header">
+      <div class="container header__content">
+          <img src="../static/css/naimix-black2.svg fill.svg" alt="Наймикс" href="/main"
+          style="cursor: pointer;" class="logo">
+          <nav class="nav">
+          <a href="#" class="nav__link">Для рекрутеров</a>
+          <a href="#" class="nav__link">Для кандидатов</a>
+          <a href="/lk" class="nav__link nav__link--button">Кабинет</a>
+          </nav>
+      </div>
+  </header>
+<body>
+
+<style>
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+main {
+  background-color: #0E6666;
+}
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Utility Classes */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: space-between;
+}
+.header {
+  background-color: #fff;
+  border-bottom: 2px solid #eaeaea;
+  padding: 10px 0;
+}
+
+.header__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav__link {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.nav__link--button {
+  color: #FF9929;
+  font-weight: bold;
+  border: 2px solid #FF9929;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+</style>
 
 
 

@@ -3,45 +3,104 @@
 
 {{template "header" .}}
 
-    <div class="row">
-      <div class="col-12">
-        <h1> ГЛАВНАЯ3 </h1>
-      </div>
-      <div class="col-12">
-        <h1> <a  href="/employee_registration_page">employee_registration_page </a> </h1>
-      </div>
-      <div class="col-12">
-        <h1> <a  href="/employee_authorization_page">employee_authorization_page </a> </h1>
-      </div>
-      <div class="col-12">
-        <h1> <a  href="/asked_to_employee/1">asked_to_employee </a> </h1>
-      </div>
-      <div class="col-12">
-        <h1> <a  href="/asked_to_employee/0">Смотреть все корпорации </a> </h1>
-      </div>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
 
-      <div class="col-12">
-        <h1> <a  href="/corporation_registration_page">corporation_registration_page </a> </h1>
-      </div>
-      <div class="col-12">
-        <h1> <a  href="/corporation_authorization_page">corporation_authorization_page </a> </h1>
-      </div>
-      <div class="col-12">
-        <h1> <a  href="/search_employees_page/0">search_employees_page </a> </h1>
-      </div>
-
-      <div class="col-12">
-        <h1> <a  href="/search_employees_page/1">корп рабы </a> </h1>
-      </div>
-      <div class="col-12">
-        <h1> <a  href="/search_employees_page/2">Заявки стать раами </a> </h1>
-      </div>
+    <title>Taro</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Подключение jQuery (необходим для некоторых компонентов Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Подключение Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 
-      <div class="col-12">
-        <h1> <a  href="/add_employee_to_your_company/2">add_employee_to_your_company </a> </h1>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div class="container hero__content">
+        <div class="hero__text">
+          <h2 class="hero__title">
+            Сервис, где рекрутеры могут использовать новые методы для подбора сотрудников
+          </h2>
+          <p class="hero__subtitle">Использование эзотерики для определения совместимости сотрудников</p>
+        </div>
+        <div class="hero__image">
+          <img src="/image 2.svg" alt="Собеседование">
+        </div>
       </div>
-    </div>
+    </section>
+
+    <section class="branding">
+      <img src="/naimix-text-orang.svg.svg" alt="Наймикс" class="logo">
+    </section>
+  </main>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    main {
+      background-color: #0E6666;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    /* Utility Classes */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      justify-content: space-between;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background-color: #0E6666;
+      color: #fff;
+      padding: 50px 0;
+    }
+    
+    .hero__content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .hero__text {
+      max-width: 600px;
+    }
+    
+    .hero__title {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .hero__subtitle {
+      font-size: 1.2rem;
+    }
+    
+    .hero__image img {
+      width: 400px;
+      height: auto;
+      border-radius: 10px;
+    }
+    
+    /* Branding Section */
+    .branding {
+      /* background-color: #FF9929; */
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+    }
+    </style>
 
 {{template "footer"}}
 {{end}}
