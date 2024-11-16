@@ -125,6 +125,7 @@ func home_page(w http.ResponseWriter, r *http.Request) {
 	t.ExecuteTemplate(w, "index", nil)
 }
 
+// Либо эта функция сюда чисто параметры передавать
 func AiResponse(nameRecruit, specialityRecruit string, birthDateRecruit, expirienceRecruit int, nameEmployee, specialityEmployee string, birthDateEmployee, expirienceEmployee int) (string, error) {
 	accessToken, err := verifykey.GetAccessToken()
 	if err != nil {
@@ -259,6 +260,7 @@ func getChatResponse(accessToken string, answer string) (string, error) {
 	return content, nil
 }
 
+// Либо эта функция сюда просто типы
 func AiCheck(recruit, employee User) (float64, error) {
 	perCentStr, err := AI.AiResponse(recruit.Name, recruit.Speciality, recruit.YearOfBirth, recruit.Expirience,
 		employee.Name, employee.Speciality, employee.YearOfBirth, employee.Expirience)
