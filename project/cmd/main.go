@@ -40,6 +40,7 @@ import( "github.com/gorilla/mux"
 	//	"sort"
 		//"log"
 	//	"strings"
+		"math"
 		"github.com/gorilla/sessions"
 		)
 
@@ -350,13 +351,13 @@ func  get_user_employee_by_id(id string) (User){
 	defer db.Close()
 
 
-	var zapros = fmt.Sprintf("SELECT id, firstname, secondname, surname, Work_experience, City_of_birth, Time_birth, Date_birth_day FROM `users` WHERE id = %s", id)
+	var zapros = fmt.Sprintf("SELECT id, firstname, secondname, surname, Work_experience, City_of_birth, Time_birth, Date_birth_day, job_title FROM `users` WHERE id = %s", id)
 	res,_ := db.Query(zapros)
 	fmt.Println(zapros)
 	var user User
 
 	for res.Next(){
-		err = res.Scan(&user.Id, &user.Firstname,&user.Secondname,&user.Surname, &user.Work_experience,  &user.City_of_birth,  &user.Time_birth, &user.Date_birth_day)
+		err = res.Scan(&user.Id, &user.Firstname,&user.Secondname,&user.Surname, &user.Work_experience,  &user.City_of_birth,  &user.Time_birth, &user.Date_birth_day, &user.Speciality)
 	}
 	return user
 }
@@ -393,7 +394,7 @@ func returnToLastPage(r *http.Request, w http.ResponseWriter){
     }
 
     // Выполняем редирект
-    http.Redirect(w, r, referer, http.StatusFound)
+    http.Redirect(w, r, "/", http.StatusFound)
 }
 func getSessionValueAsString(session *sessions.Session, key string) string {
     if val, ok := session.Values[key].(string); ok {
@@ -467,7 +468,7 @@ func employee_authorization_page(w http.ResponseWriter, r *http.Request){
 
 			user.Employee.Is_that_authorized_user = true
 			saveUserToSession(r, w, sessionName, user)
-			http.Redirect(w, r, "/employee_profile/" + user.Employee.Id, http.StatusSeeOther)
+			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 
 
@@ -615,7 +616,7 @@ func corporation_authorization_page(w http.ResponseWriter, r *http.Request){
 
 
 			saveUserToSession(r, w, sessionName, user)
-			http.Redirect(w, r, "/corporation_profile/" + user.Corporation.Id, http.StatusSeeOther)
+			http.Redirect(w, r, "/" , http.StatusSeeOther)
 		}
 
 
@@ -725,7 +726,7 @@ func compare_employees (userMayBe User , r *http.Request) (float64){
 		fmt.Println("----------------------------------------------")
 		fmt.Println()
 	}
-	return summEmpl/countEmpl
+	return math.Round(summEmpl/countEmpl*100)/100
 
 
 }
@@ -760,7 +761,7 @@ func add_employee_to_your_company(w http.ResponseWriter, r *http.Request){
 
 	fmt.Println(authorized_user.Corporation)
 
-
+	http.Redirect(w, r, "/for_company", http.StatusSeeOther)
 
 }
 
@@ -886,7 +887,77 @@ func reject_apruvd_ask(w http.ResponseWriter, r *http.Request){
 
 
 
+func for_company(w http.ResponseWriter, r *http.Request){
+      t, err := template.ParseFiles("../frontend/templates/for_company.html", "../frontend/templates/header.html", "../frontend/templates/footer.html")
+      if err != nil{
+        fmt.Fprintf(w, err.Error())
 
+      }
+			authorized_user, _  := populateUserFromSession(r, sessionName)
+			//authorized_user.Corporation = get_user_employee_by_id(authorized_user.Corporation.Id)
+			if(authorized_user.Corporation.Id == ""){
+					http.Redirect(w, r, "/for_company_input", http.StatusFound)
+			}
+			fmt.Println("for_company_input ")
+      //var data Data_for_personal_page
+
+      //authorized_user, err  := populateUserFromSession(r, sessionName)
+      //data.Authorized_user_data  = authorized_user
+      t.ExecuteTemplate(w, "for_company", nil)
+}
+
+func for_recruts(w http.ResponseWriter, r *http.Request){
+      t, err := template.ParseFiles("../frontend/templates/for_recruts.html", "../frontend/templates/header.html", "../frontend/templates/footer.html")
+      if err != nil{
+        fmt.Fprintf(w, err.Error())
+
+      }
+			authorized_user, _  := populateUserFromSession(r, sessionName)
+			//authorized_user.Corporation = get_user_employee_by_id(authorized_user.Corporation.Id)
+			if(authorized_user.Employee.Id == ""){
+					http.Redirect(w, r, "/for_recruts_input", http.StatusFound)
+			}
+			fmt.Println("for_recruts ")
+      //var data Data_for_personal_page
+
+      //authorized_user, err  := populateUserFromSession(r, sessionName)
+      //data.Authorized_user_data  = authorized_user
+      t.ExecuteTemplate(w, "for_recruts", nil)
+}
+
+
+
+func for_company_input(w http.ResponseWriter, r *http.Request){
+      t, err := template.ParseFiles("../frontend/templates/for_company_input.html", "../frontend/templates/header.html", "../frontend/templates/footer.html")
+      if err != nil{
+        fmt.Fprintf(w, err.Error())
+
+      }
+
+			fmt.Println("for_company_input ")
+      //var data Data_for_personal_page
+
+      //authorized_user, err  := populateUserFromSession(r, sessionName)
+      //data.Authorized_user_data  = authorized_user
+      t.ExecuteTemplate(w, "for_company_input", nil)
+}
+
+
+
+func for_recruts_input(w http.ResponseWriter, r *http.Request){
+      t, err := template.ParseFiles("../frontend/templates/for_recruts_input.html", "../frontend/templates/header.html", "../frontend/templates/footer.html")
+      if err != nil{
+        fmt.Fprintf(w, err.Error())
+
+      }
+
+			fmt.Println("for_recruts_input ")
+      //var data Data_for_personal_page
+
+      //authorized_user, err  := populateUserFromSession(r, sessionName)
+      //data.Authorized_user_data  = authorized_user
+      t.ExecuteTemplate(w, "for_recruts_input", nil)
+}
 
 
 
@@ -922,9 +993,21 @@ func main() {
 
 
 
+
+
+
 	r.HandleFunc("/add_employee_to_your_company/{id_employee}", add_employee_to_your_company)
 
 
+
+
+//	r.HandleFunc("/input_page", input_page)
+
+	r.HandleFunc("/for_recruts", for_recruts)
+ 	r.HandleFunc("/for_company", for_company)
+
+	r.HandleFunc("/for_recruts_input", for_recruts_input)
+	r.HandleFunc("/for_company_input", for_company_input)
 //	r.HandleFunc("/check_ai", check_ai)
 
   http.Handle ("/", r)

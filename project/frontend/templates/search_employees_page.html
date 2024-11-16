@@ -8,17 +8,42 @@
     </div>
       {{range .Employees}}
 
-        <div class="col-12" style ="width:100px; height:100px; background-color:red; margin-bottom:30px;">
-          {{if eq $.Style "2"}}
-            <a href="/add_employee_to_your_company/{{.Id}}">
-              {{.Firstname}}  {{.Id}} Rating {{.Suitable_rating}}
-            </a>
-          {{else}}
-          <a href="/add_employee_to_your_company/{{.Id}}">
-            {{.Firstname}}  {{.Id}} Rating {{.Suitable_rating}}
-          </a>
+        <div class="col-6 offset-md-3" style ="width:100px; height:100px; background-color:#0E6666; margin-bottom:30px;color:white;">
+          {{if eq $.Style "0"}}
+            <a href="/add_employee_to_your_company/{{.Id}}" style="color:white;">
+
+
+          {{else if eq $.Style "1"}}
+
+            <a href="/employee_profile/{{.Id}}" style="color:white;">
+
+
+
+
+
+
           {{end}}
+          <div class = "row">
+            <div class = "col-12">
+              {{.Firstname}}  {{.Surname}}
+            </div>
+
+            <div class = "col-4">
+
+            </div>
+            <div class = "col-4">
+              {{.Speciality}}        Стаж работы:{{.Work_experience}}
+            </div>
+            <div class = "col-4">
+              Rating Taro {{.Suitable_rating}}
+            </div>
+
+          </div>
+
+          </a>
         </div>
+        <div class="col-3">
+          </div>
 
       {{end}}
 

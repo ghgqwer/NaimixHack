@@ -5,8 +5,8 @@
 
     <div class="row">
       {{range .Corporations}}
-        <div class = "col-12" style="width:100px; height:100px; background-color:red; margin-bottom:10px;">
-          {{.Name}}
+        <div class = "col-6 offset-md-3" style="width:100px; height:100px; background-color:#0E6666; margin-bottom:30px;color:white;">
+          Компания {{.Name}} приглашает Вас на работу
           {{if eq $.Style "1"}}
             <a href="/reject_apruvd_ask/{{.Id}}/1">Принять </a>
             <a href="/reject_apruvd_ask/{{.Id}}/0">Отказ</a>
@@ -14,6 +14,8 @@
             <a href="/add_company_to_wanted_company/{{.Id}}">Отправить заявку</a>
 
           {{end}}
+        </div>
+        <div class="col-3">
         </div>
       {{end}}
     </div>
