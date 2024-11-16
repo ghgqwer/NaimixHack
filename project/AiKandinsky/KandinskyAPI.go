@@ -1,5 +1,10 @@
 package AiKandinsky
 
+//пример использования
+// в main.go:
+//AiKandinsky.GenAvatar(AiKandinsky.User(user1))
+//сохраняется в AiKandinsky/users/:id
+
 import (
 	"fmt"
 	"log"
