@@ -1,0 +1,22 @@
+
+{{define "asked_to_employee"}}
+
+{{template "header" .}}
+
+    <div class="row">
+      {{range .Corporations}}
+        <div class = "col-12" style="width:100px; height:100px; background-color:red; margin-bottom:10px;">
+          {{.Name}}
+          {{if eq $.Style "1"}}
+            <a href="/reject_apruvd_ask/{{.Id}}/1">Принять </a>
+            <a href="/reject_apruvd_ask/{{.Id}}/0">Отказ</a>
+          {{else}}
+            <a href="/add_company_to_wanted_company/{{.Id}}">Отправить заявку</a>
+
+          {{end}}
+        </div>
+      {{end}}
+    </div>
+
+{{template "footer"}}
+{{end}}

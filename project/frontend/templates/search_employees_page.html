@@ -7,11 +7,19 @@
       Поиск сотрудников
     </div>
       {{range .Employees}}
-        <div class="col-12">
+
+        <div class="col-12" style ="width:100px; height:100px; background-color:red; margin-bottom:30px;">
+          {{if eq $.Style "2"}}
+            <a href="/add_employee_to_your_company/{{.Id}}">
+              {{.Firstname}}  {{.Id}} Rating {{.Suitable_rating}}
+            </a>
+          {{else}}
           <a href="/add_employee_to_your_company/{{.Id}}">
-            {{.Firstname}} {{.Id}}
+            {{.Firstname}}  {{.Id}} Rating {{.Suitable_rating}}
           </a>
+          {{end}}
         </div>
+
       {{end}}
 
   </div>

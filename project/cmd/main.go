@@ -56,6 +56,7 @@ type Auth_data struct{
 
 type Seraching_page_data struct{
 		Employees []User
+		Style string
 }
 
 
@@ -64,11 +65,17 @@ type User struct{
    Id, Firstname, Surname,Secondname, Email, Password, Date_birth_day, Time_birth, City_of_birth, Work_experience, Speciality string
    Is_that_authorized_user bool
    Is_it_admin bool
+	 Suitable_rating float64
 }
 
 type Corporation_data struct{
 	Id, Email, Password, Name string
 	Employees []User
+}
+
+type Search_corp_data struct{
+	Corporations []Corporation_data
+	Style string
 }
 var store = sessions.NewCookieStore([]byte("super-secret-key"))
 
@@ -621,7 +628,26 @@ func corporation_authorization_page(w http.ResponseWriter, r *http.Request){
 func search_employees_page (w http.ResponseWriter, r *http.Request){
 	t, err := template.ParseFiles("../frontend/templates/search_employees_page.html", "../frontend/templates/header.html", "../frontend/templates/footer.html")
 
+
+	vars := mux.Vars(r)
+  w.WriteHeader(http.StatusOK)
+//  fmt.Fprintf(w, "Category: %v\n", vars["id_user"])
+  var style = vars["style"]
+	where_zapr := ""
+	authorized_user, _  := populateUserFromSession(r, sessionName)
+	authorized_user.Corporation = get_user_corporation_by_id(authorized_user.Corporation.Id)
+	if(style == "0"){
+		where_zapr = "SELECT id FROM `users` "
+	}else if(style == "1"){
+
+		where_zapr = fmt.Sprintf("SELECT DISTINCT  id_employee FROM `Employees_of_companies` WHERE id_company = %s", authorized_user.Corporation.Id)
+	}else{
+
+		where_zapr = fmt.Sprintf("SELECT DISTINCT  id_employee FROM `ask_to_corp` WHERE id_corporation = %s", authorized_user.Corporation.Id)
+	}
+
 	var data Seraching_page_data
+	data.Style = style
 	if err != nil{
 		fmt.Fprintf(w, err.Error())
 	}
@@ -632,7 +658,7 @@ func search_employees_page (w http.ResponseWriter, r *http.Request){
 	defer db.Close()
 
 
-	var zapros = fmt.Sprintf("SELECT id FROM `users`")
+	var zapros = fmt.Sprintf("%s", where_zapr)
 	res,_ := db.Query(zapros)
 	fmt.Println(zapros)
 	var user User
@@ -643,7 +669,8 @@ func search_employees_page (w http.ResponseWriter, r *http.Request){
 		fmt.Println(user.Id)
 
 		user = get_user_employee_by_id(user.Id)
-
+		res_avg := compare_employees(user, r)
+		user.Suitable_rating = res_avg
 		data.Employees = append(data.Employees, user)
 		fmt.Print("This:   ")
 		fmt.Println(user.Id)
@@ -656,6 +683,52 @@ func search_employees_page (w http.ResponseWriter, r *http.Request){
 
 }
 
+func compare_employees (userMayBe User , r *http.Request) (float64){
+
+	authorized_user, _  := populateUserFromSession(r, sessionName)
+	authorized_user.Corporation = get_user_corporation_by_id(authorized_user.Corporation.Id)
+	where_zapr := fmt.Sprintf("SELECT DISTINCT  id_employee FROM `Employees_of_companies` WHERE id_company = %s", authorized_user.Corporation.Id)
+	var summEmpl float64
+	var countEmpl float64
+	var zapros = fmt.Sprintf("%s", where_zapr)
+
+
+	db, err := sql.Open("mysql", adress_data_base_test)
+	if err != nil{
+		panic(err)
+	}
+	defer db.Close()
+
+
+
+	res,_ := db.Query(zapros)
+	fmt.Println(zapros)
+	var user User
+
+	for res.Next(){
+		err = res.Scan(&user.Id)
+
+
+
+		user = get_user_employee_by_id(user.Id)
+		fmt.Print("This2 :   ")
+		fmt.Print(user)
+		fmt.Print("     ")
+		fmt.Println(userMayBe)
+		res, _ := AiCheck(user, userMayBe)
+		summEmpl += res
+		countEmpl += 1
+		fmt.Print("check   ")
+		fmt.Println(res)
+
+
+		fmt.Println("----------------------------------------------")
+		fmt.Println()
+	}
+	return summEmpl/countEmpl
+
+
+}
 
 
 func add_employee_to_your_company(w http.ResponseWriter, r *http.Request){
@@ -677,7 +750,88 @@ func add_employee_to_your_company(w http.ResponseWriter, r *http.Request){
 		panic(err)
 	}
 	defer db.Close()
-	result, err := db.Exec("insert into naimix.Employees_of_companies ( `id_employee`,	`id_company`) values (?, ?)",current_employee_id, authorized_user.Corporation.Id)
+	result, err := db.Exec("insert into naimix.ask_to_employees ( `id_employee`,	`id_company`) values (?, ?)",current_employee_id, authorized_user.Corporation.Id)
+
+	fmt.Println(result)
+	if(err != nil){
+		fmt.Println(err)
+	}
+
+
+	fmt.Println(authorized_user.Corporation)
+
+
+
+}
+
+func asked_to_employee(w http.ResponseWriter, r *http.Request){
+	t, err := template.ParseFiles("../frontend/templates/asked_to_employee.html", "../frontend/templates/header.html", "../frontend/templates/footer.html")
+
+	db, err := sql.Open("mysql", adress_data_base_test)
+	if err != nil{
+		panic(err)
+	}
+	defer db.Close()
+
+
+	var data Search_corp_data
+	authorized_user, _  := populateUserFromSession(r, sessionName)
+	authorized_user.Employee = get_user_employee_by_id(authorized_user.Employee.Id)
+
+	vars := mux.Vars(r)
+	w.WriteHeader(http.StatusOK)
+//  fmt.Fprintf(w, "Category: %v\n", vars["id_user"])
+	var style = vars["style"]
+	where_zapr := ""
+	data.Style = style
+	if(style == "0"){
+		where_zapr = fmt.Sprintf("SELECT 	id FROM `corporations`")
+		//where_zapr = "SELECT id FROM `users` "
+	}else if(style == "1"){
+
+		where_zapr = fmt.Sprintf("SELECT 	id_company FROM `ask_to_employees` WHERE id_employee = %s", authorized_user.Employee.Id)
+	}
+
+
+
+	var zapros = fmt.Sprintf(where_zapr)
+
+
+	res,_ := db.Query(zapros)
+	fmt.Println(zapros)
+	var corp_now Corporation_data
+
+	for res.Next(){
+		err = res.Scan(&corp_now.Id)
+		corp_now = get_user_corporation_by_id(corp_now.Id)
+		data.Corporations = append(data.Corporations, corp_now)
+	}
+
+
+	t.ExecuteTemplate(w, "asked_to_employee", data)
+}
+
+
+func add_company_to_wanted_company(w http.ResponseWriter, r *http.Request){
+
+	vars := mux.Vars(r)
+  w.WriteHeader(http.StatusOK)
+//  fmt.Fprintf(w, "Category: %v\n", vars["id_user"])
+  var current_company_id = vars["id_company"]
+
+	fmt.Println()
+
+	authorized_user, _  := populateUserFromSession(r, sessionName)
+	authorized_user.Employee = get_user_employee_by_id(authorized_user.Employee.Id)
+
+
+
+	db, err := sql.Open("mysql", adress_data_base_test)
+	if err != nil{
+		panic(err)
+	}
+	defer db.Close()
+	result, err := db.Exec("insert into naimix.ask_to_corp ( `id_employee`,	`id_corporation`) values (?, ?)",authorized_user.Employee.Id, current_company_id)
 
 	fmt.Println(result)
 	if(err != nil){
@@ -692,6 +846,43 @@ func add_employee_to_your_company(w http.ResponseWriter, r *http.Request){
 }
 
 
+
+
+
+
+func reject_apruvd_ask(w http.ResponseWriter, r *http.Request){
+
+
+	vars := mux.Vars(r)
+	w.WriteHeader(http.StatusOK)
+//  fmt.Fprintf(w, "Category: %v\n", vars["id_user"])
+	var corp = vars["id_corp"]
+
+	var rej_apr = vars["rej_apr"]
+
+	db, err := sql.Open("mysql", adress_data_base_test)
+	if err != nil{
+		panic(err)
+	}
+	defer db.Close()
+
+	authorized_user, _  := populateUserFromSession(r, sessionName)
+	authorized_user.Employee = get_user_employee_by_id(authorized_user.Employee.Id)
+
+
+	if(rej_apr == "1"){
+		_, _ = db.Exec("insert into naimix.Employees_of_companies ( `id_employee`,	`id_company`) values (?, ?)",authorized_user.Employee.Id, corp)
+	}
+
+	query := "DELETE FROM ask_to_employees WHERE id_company = ?"
+
+  _, err = db.Exec(query, corp)
+  if err != nil {
+      log.Fatal(err)
+  }
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
 
 
 
@@ -719,18 +910,22 @@ func main() {
 	r.HandleFunc("/employee_registration_page", employee_registration_page)
 	r.HandleFunc("/employee_authorization_page", employee_authorization_page)
 	r.HandleFunc("/employee_profile/{id_employee}", employee_profile)
+	r.HandleFunc("/asked_to_employee/{style}", asked_to_employee)
+	r.HandleFunc("/reject_apruvd_ask/{id_corp}/{rej_apr}", reject_apruvd_ask)
+	r.HandleFunc("/add_company_to_wanted_company/{id_company}", add_company_to_wanted_company)
+
 
 	r.HandleFunc("/corporation_registration_page", corporation_registration_page)
 	r.HandleFunc("/corporation_authorization_page", corporation_authorization_page)
 	r.HandleFunc("/corporation_profile/{id_corporation}", corporation_profile)
-	r.HandleFunc("/search_employees_page", search_employees_page)
+	r.HandleFunc("/search_employees_page/{style}", search_employees_page)
 
 
 
 	r.HandleFunc("/add_employee_to_your_company/{id_employee}", add_employee_to_your_company)
 
 
-	r.HandleFunc("/check_ai", check_ai)
+//	r.HandleFunc("/check_ai", check_ai)
 
   http.Handle ("/", r)
   http.ListenAndServe(":8080", nil)
