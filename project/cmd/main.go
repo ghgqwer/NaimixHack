@@ -11,11 +11,12 @@ import( "github.com/gorilla/mux"
 
 		"project/AI"
 		verifykey "project/AI/verifyKey"
+		aiKand "project/AiKandinsky"
 		"bytes"
 		"crypto/tls"
 		"encoding/json"
 
-
+		"os/exec"
 		"io/ioutil"
 		"log"
 
@@ -66,7 +67,8 @@ type User struct{
    Id, Firstname, Surname,Secondname, Email, Password, Date_birth_day, Time_birth, City_of_birth, Work_experience, Speciality string
    Is_that_authorized_user bool
    Is_it_admin bool
-	 Suitable_rating float64
+	 Suitable_rating string
+	 Icon_link string
 }
 
 type Corporation_data struct{
@@ -359,6 +361,7 @@ func  get_user_employee_by_id(id string) (User){
 	for res.Next(){
 		err = res.Scan(&user.Id, &user.Firstname,&user.Secondname,&user.Surname, &user.Work_experience,  &user.City_of_birth,  &user.Time_birth, &user.Date_birth_day, &user.Speciality)
 	}
+	user.Icon_link = "../static2/" + user.Id + "/icon.jpg"
 	return user
 }
 
@@ -516,7 +519,24 @@ func employee_registration_page(w http.ResponseWriter, r *http.Request){
 					if(err != nil){
 						fmt.Println(err)
 					}
+					var zapros = fmt.Sprintf("SELECT id FROM `users` ORDER BY id DESC LIMIT 1;")
+					var newU User
+					res,_ := db.Query(zapros)
+					fmt.Println(zapros)
+					for res.Next(){
+						err = res.Scan(&newU.Id)
+					}
+					newU = get_user_employee_by_id(newU.Id)
 
+
+					var aiUser aiKand.User
+					aiUser.Id = newU.Id
+					aiUser.Name = newU.Firstname
+					aiUser.Surname = newU.Surname
+					aiUser.Expirience = newU.Work_experience
+
+
+					aiKand.GenAvatar(aiUser)
 
 
 			}
@@ -642,6 +662,9 @@ func search_employees_page (w http.ResponseWriter, r *http.Request){
 	}else if(style == "1"){
 
 		where_zapr = fmt.Sprintf("SELECT DISTINCT  id_employee FROM `Employees_of_companies` WHERE id_company = %s", authorized_user.Corporation.Id)
+	}else if(style == "3"){
+
+		where_zapr = fmt.Sprintf("SELECT DISTINCT  id_employee FROM `favourites` WHERE id_corporation = %s", authorized_user.Corporation.Id)
 	}else{
 
 		where_zapr = fmt.Sprintf("SELECT DISTINCT  id_employee FROM `ask_to_corp` WHERE id_corporation = %s", authorized_user.Corporation.Id)
@@ -671,7 +694,7 @@ func search_employees_page (w http.ResponseWriter, r *http.Request){
 
 		user = get_user_employee_by_id(user.Id)
 		res_avg := compare_employees(user, r)
-		user.Suitable_rating = res_avg
+		user.Suitable_rating = strconv.FormatFloat(res_avg, 'f', -1, 64)
 		data.Employees = append(data.Employees, user)
 		fmt.Print("This:   ")
 		fmt.Println(user.Id)
@@ -725,6 +748,9 @@ func compare_employees (userMayBe User , r *http.Request) (float64){
 
 		fmt.Println("----------------------------------------------")
 		fmt.Println()
+	}
+	if(countEmpl == 0){
+		return -1
 	}
 	return math.Round(summEmpl/countEmpl*100)/100
 
@@ -790,7 +816,7 @@ func asked_to_employee(w http.ResponseWriter, r *http.Request){
 		//where_zapr = "SELECT id FROM `users` "
 	}else if(style == "1"){
 
-		where_zapr = fmt.Sprintf("SELECT 	id_company FROM `ask_to_employees` WHERE id_employee = %s", authorized_user.Employee.Id)
+		where_zapr = fmt.Sprintf("SELECT DISTINCT 	id_company FROM `ask_to_employees` WHERE id_employee = %s", authorized_user.Employee.Id)
 	}
 
 
@@ -841,13 +867,48 @@ func add_company_to_wanted_company(w http.ResponseWriter, r *http.Request){
 
 
 	fmt.Println(authorized_user.Corporation)
-
+	http.Redirect(w, r, "/for_recruts", http.StatusSeeOther)
 
 
 }
 
 
 
+func add_or_delete_from_favourites(w http.ResponseWriter, r *http.Request){
+
+	vars := mux.Vars(r)
+	w.WriteHeader(http.StatusOK)
+//  fmt.Fprintf(w, "Category: %v\n", vars["id_user"])
+	var corp = vars["id_empl"]
+
+	var rej_apr = vars["rej_apr"]
+
+	db, err := sql.Open("mysql", adress_data_base_test)
+	if err != nil{
+		panic(err)
+	}
+	defer db.Close()
+
+	authorized_user, _  := populateUserFromSession(r, sessionName)
+	authorized_user.Corporation = get_user_corporation_by_id(authorized_user.Corporation.Id)
+
+	query := ""
+	if(rej_apr == "1"){
+		fmt.Println("C>LFFFLC>LF")
+		query = "insert into naimix.favourites ( `id_employee`,	`id_corporation`) values (?, ?)"
+	}else{
+		fmt.Println("DELETETETE")
+		query = "DELETE FROM favourites WHERE id_employee = ? AND id_corporation=?"
+	}
+
+	_, _ = db.Exec(query, corp ,authorized_user.Corporation.Id)
+
+  if err != nil {
+      log.Fatal(err)
+  }
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
 
 
 
@@ -875,15 +936,59 @@ func reject_apruvd_ask(w http.ResponseWriter, r *http.Request){
 		_, _ = db.Exec("insert into naimix.Employees_of_companies ( `id_employee`,	`id_company`) values (?, ?)",authorized_user.Employee.Id, corp)
 	}
 
-	query := "DELETE FROM ask_to_employees WHERE id_company = ?"
+	query := "DELETE FROM ask_to_employees WHERE id_company = ? AND id_employee = ?"
 
-  _, err = db.Exec(query, corp)
+  _, err = db.Exec(query, corp, authorized_user.Employee.Id)
   if err != nil {
       log.Fatal(err)
   }
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
+
+
+
+
+
+func reject_apruvd_ask_to_empl(w http.ResponseWriter, r *http.Request){
+
+
+	vars := mux.Vars(r)
+	w.WriteHeader(http.StatusOK)
+//  fmt.Fprintf(w, "Category: %v\n", vars["id_user"])
+	var corp = vars["id_empl"]
+
+	var rej_apr = vars["rej_apr"]
+
+	db, err := sql.Open("mysql", adress_data_base_test)
+	if err != nil{
+		panic(err)
+	}
+	defer db.Close()
+
+	authorized_user, _  := populateUserFromSession(r, sessionName)
+	authorized_user.Corporation = get_user_corporation_by_id(authorized_user.Corporation.Id)
+	fmt.Print("auCORP")
+	fmt.Println(authorized_user.Corporation)
+
+
+	if(rej_apr == "1"){
+		_, _ = db.Exec("insert into naimix.Employees_of_companies ( `id_employee`,	`id_company`) values (?, ?)", corp, authorized_user.Corporation.Id)
+
+	}
+
+	query := fmt.Sprintf("DELETE FROM ask_to_corp WHERE id_corporation = %s AND id_employee = %s",  authorized_user.Corporation.Id, corp)
+
+
+  _, err = db.Exec(query)
+  if err != nil {
+      log.Fatal(err)
+  }
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+
 
 
 
@@ -959,7 +1064,22 @@ func for_recruts_input(w http.ResponseWriter, r *http.Request){
       t.ExecuteTemplate(w, "for_recruts_input", nil)
 }
 
+func GenAvatar(user User) {
+	prompt := fmt.Sprintf("Нарисуй абстрактную картинку используя знания из нумерологии"+
+		"космограммы и таро, зная такие данные: %s, %s, "+
+		"%s года рождения, профессия - %s, %s опыт работы",
+		user.Surname, user.Firstname, user.Date_birth_day, user.Speciality, user.Work_experience)
 
+	cmd := exec.Command("python3", "../AiKandinsky/main.py", prompt, user.Id, user.Surname, user.Firstname)
+	fmt.Println("9 8 ---- 8743 -")
+	err := cmd.Run()
+
+	if err != nil {
+		log.Fatalf("Error running script: %v", err)
+	}
+
+	log.Println("Image generated and saved successfully.")
+}
 
 func main() {
 
@@ -972,6 +1092,7 @@ func main() {
 
 
  	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("../frontend/static"))))
+	http.Handle("/static2/", http.StripPrefix("/static2/", http.FileServer(http.Dir("../AiKandinsky/users"))))
 	r := mux.NewRouter()
 	fmt.Println("Start")
 
@@ -990,8 +1111,8 @@ func main() {
 	r.HandleFunc("/corporation_authorization_page", corporation_authorization_page)
 	r.HandleFunc("/corporation_profile/{id_corporation}", corporation_profile)
 	r.HandleFunc("/search_employees_page/{style}", search_employees_page)
-
-
+	r.HandleFunc("/reject_apruvd_ask_to_empl/{id_empl}/{rej_apr}", reject_apruvd_ask_to_empl)
+	r.HandleFunc("/add_or_delete_from_favourites/{id_empl}/{rej_apr}", add_or_delete_from_favourites)
 
 
 

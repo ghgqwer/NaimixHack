@@ -4,15 +4,19 @@
 {{template "header" .}}
 
     <div class="row">
+      <div class = "col-12">
+        Здесь отображаются предложения о работе
+      </div>
       {{range .Corporations}}
-        <div class = "col-6 offset-md-3" style="width:100px; height:100px; background-color:#0E6666; margin-bottom:30px;color:white;">
-          Компания {{.Name}} приглашает Вас на работу
+        <div class = "col-6 offset-md-3 standart_border_radius" style="width:100px; height:100px; background-color:#0E6666; margin-bottom:30px;color:white;">
+
           {{if eq $.Style "1"}}
+            Компания {{.Name}} приглашает Вас на работу
             <a href="/reject_apruvd_ask/{{.Id}}/1">Принять </a>
             <a href="/reject_apruvd_ask/{{.Id}}/0">Отказ</a>
           {{else}}
+            {{.Name}}
             <a href="/add_company_to_wanted_company/{{.Id}}">Отправить заявку</a>
-
           {{end}}
         </div>
         <div class="col-3">
