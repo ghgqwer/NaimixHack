@@ -17,7 +17,7 @@ func GetAccessToken() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	AuthorizationKey := "MDk1NWUzNjAtNTlhMi00ZmMzLTk0YzktY2YyYjQxMTNhYWEyOjc1MzlhOWRjLWQwMzItNDYyNC04NzdiLWY1YmFjZGExMTE3ZA=="
+	AuthorizationKey := "MDk1NWUzNjAtNTlhMi00ZmMzLTk0YzktY2YyYjQxMTNhYWEyOmM0YjQ5MTg1LTdjMjktNGY3NC05ODBjLWZkNDJiYTYzMjc5Yg=="
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("RqUID", "0955e360-59a2-4fc3-94c9-cf2b4113aaa2")
