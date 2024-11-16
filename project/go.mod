@@ -1,4 +1,4 @@
-module backend
+module project
 
 go 1.23.1
 
