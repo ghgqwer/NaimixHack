@@ -1,0 +1,360 @@
+{{define "header"}}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Taro</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <!-- Подключение jQuery (необходим для некоторых компонентов Bootstrap) -->
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <!-- Подключение Bootstrap JS -->
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
+</head>
+<body>
+  <header class="header">
+      <div class="container header__content">
+          <a href="/" class="nav__link">
+            <img src="../static/css/naimix-black2.svg fill.svg" alt="Наймикс" href="/main"
+            style="cursor: pointer;" class="logo">
+            <nav class="nav">
+          </a>
+          <a href="/for_company" class="nav__link">Для рекрутеров</a>
+          <a href="/for_recruts" class="nav__link">Для кандидатов</a>
+          <!--<a href="/input_page" class="nav__link nav__link--button">Кабинет</a>-->
+          </nav>
+      </div>
+  </header>
+<body>
+
+<style>
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+main {
+  background-color: #0E6666;
+}
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Utility Classes */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: space-between;
+}
+
+.standart_border_radius {
+  border-radius: 6px;
+}
+
+.button_for_main {
+
+  width: 150px;
+  background-color:white;
+  color:black;
+  margin-bottom: 30px;
+  height: auto;
+  width: 100%;
+  display: flex; /* Flexbox для центрирования */
+  justify-content: center; /* Центрирование по горизонтали */
+  align-items: center; /* Центрирование по вертикали */
+
+}
+
+.img_for_empl{
+  height: 130px;
+  width: 130px;
+
+}
+
+.adaptive_button{
+  height:auto;
+  width: auto;
+  background-color: #eaeaea;
+  margin-bottom: 10px;
+  color: black;
+
+}
+
+.header {
+  background-color: #fff;
+  border-bottom: 2px solid #eaeaea;
+  padding: 10px 0;
+}
+
+.header__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav__link {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.nav__link--button {
+  color: #FF9929;
+  font-weight: bold;
+  border: 2px solid #FF9929;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+main {
+  background-color: #0E6666;
+  background-image: url('your-background-pattern.svg'); /* Укажите фон с символами */
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fff;
+  padding: 20px;
+}
+
+/* Основной контент */
+.content {
+  display: flex;
+  flex-direction: column; /* Вертикальная компоновка */
+  align-items: center;
+  gap: 20px;
+  margin: 40px auto;
+}
+
+.text-block {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #FF7F00;
+  border-radius: 10px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.text-with-image {
+  display: flex;
+  flex-direction: row; /* Размещаем текст и изображение в одной строке */
+  gap: 20px;
+}
+
+.text {
+  flex: 2;
+}
+
+.text h1 {
+  font-size: 1.5rem; /* Настроено для совпадения с изображением */
+  font-weight: 600;
+}
+
+.text p {
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.image-inside {
+  flex: 1;
+}
+
+.image-inside img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.image-block {
+  width: 100%;
+  max-width: 800px;
+}
+
+.image-block img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* Footer */
+.brand {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.brand h2 {
+  font-size: 2.5rem;
+  color: #FF7F00;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .text-with-image {
+    flex-direction: column; /* Перестраиваем в колонку для мобильных */
+    gap: 10px;
+  }
+
+  .text h1 {
+    font-size: 1.3rem;
+  }
+
+  .image-block {
+    max-width: 100%;
+  }
+
+  .brand h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .text h1 {
+    font-size: 1.1rem;
+  }
+
+  .brand h2 {
+    font-size: 1.8rem;
+  }
+}
+
+
+<style>
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+main {
+  background-color: #0E6666;
+}
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Utility Classes */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: space-between;
+}
+
+.standart_border_radius {
+  border-radius: 6px;
+}
+
+.button_for_main {
+
+  width: 150px;
+  background-color:white;
+  color:black;
+  margin-bottom: 30px;
+  height: auto;
+  width: 100%;
+  display: flex; /* Flexbox для центрирования */
+  justify-content: center; /* Центрирование по горизонтали */
+  align-items: center; /* Центрирование по вертикали */
+
+}
+
+.img_for_empl{
+  height: 130px;
+  width: 130px;
+
+}
+
+.adaptive_button{
+  height:auto;
+  width: auto;
+  background-color: #eaeaea;
+  margin-bottom: 10px;
+  color: black;
+
+}
+
+.header {
+  background-color: #fff;
+  border-bottom: 2px solid #eaeaea;
+  padding: 10px 0;
+}
+
+.header__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav__link {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.nav__link:hover {
+  text-decoration: none;
+  color: #f76217;
+}
+
+.nav__link--button {
+  color: #FF9929;
+  font-weight: bold;
+  border: 2px solid #FF9929;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+
+</style>
+
+
+
+
+
+
+{{end}}

@@ -1,0 +1,115 @@
+{{define "for_company"}}
+
+{{template "header" .}}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taro</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+  <main class="bg-teal">
+    <section class="hero">
+      <div class="container text-center py-5">
+        <h2 class="hero__title text-white mb-4">
+          Сервис, где рекрутеры могут использовать новые методы для подбора сотрудников
+        </h2>
+
+        <div class="row align-items-center">
+          <!-- Left Section -->
+          <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card shadow-sm border-0">
+              <div class="card-header bg-primary text-white text-center">
+                <h5>Для ищущих людей</h5>
+              </div>
+              <div class="card-body">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <a href="/search_employees_page/0" class="btn btn-outline-primary btn-block">Просмотреть всех рекрутов</a>
+                  </li>
+                  <li class="list-group-item">
+                    <a href="/search_employees_page/1" class="btn btn-outline-primary btn-block">Текущая команда</a>
+                  </li>
+                  <li class="list-group-item">
+                    <a href="/search_employees_page/2" class="btn btn-outline-primary btn-block">Заявки на вступление в компанию</a>
+                  </li>
+                  <li class="list-group-item">
+                    <a href="/search_employees_page/3" class="btn btn-outline-primary btn-block">Избранные кандидаты</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+
+    .bg-teal {
+        background-color: #0E6666;
+    }
+
+    .hero {
+        padding: 60px 0;
+    }
+
+    .hero__title {
+        font-size: 2.2rem;
+        font-weight: 700;
+    }
+    .card {
+        border-radius: 10px;
+    }
+    .card-header {
+      background-color: #FF9929 !important; /* Force the change */
+      color: white !important;
+      font-weight: bold;
+      border-radius: 10px;
+      text-align: center;
+  }
+    .list-group-item {
+        text-align: center;
+        padding: 15px;
+    }
+
+    .btn-block {
+        width: 100%;
+    }
+
+    .btn-outline-primary {
+        color: #0E6666;
+        border: 2px solid #0E6666;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    /* Hover Effect */
+    .btn-outline-primary:hover {
+        background-color: #FF9929;
+        color: #fff;
+        border-color: #FF9929;
+    }
+
+    .img-fluid {
+        max-width: 80%;
+        max-height: 300px;
+    }
+  </style>
+
+
+{{template "footer"}}
+{{end}}

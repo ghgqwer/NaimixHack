@@ -1,0 +1,141 @@
+{{define "corporation_authorization_page"}}
+
+{{template "header" .}}
+
+<title>Вход в систему</title>
+<main>
+  <div class="login-container">
+      <form action="/corporation_authorization_page" method="POST" class="authorization-form">
+          <h2 class="name">Вход для сотрудника</h2>
+
+          <div class="form-group">
+              <label for="email">Email</label>
+              <input type="text" id="email" name="email" required placeholder="Введите email">
+          </div>
+
+          <div class="form-group">
+              <label for="password">Пароль</label>
+              <input type="password" id="password" name="password" required placeholder="Введите пароль">
+          </div>
+
+          <button type="submit" class="submit-button">Войти</button>
+      </form>
+      <div class="register-link">
+          <p style="color: #fff">Нет аккаунта? <a href="/corporation_registration_page">Зарегистрироваться</a></p>
+      </div>
+  </div>
+</main>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #e9ecef; /* Фоновый цвет страницы */
+    }
+
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh; /* Занять всю высоту экрана */
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .authorization-form {
+        font-size: 16px;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 90%; /* Ширина формы на мобильных устройствах */
+        max-width: 400px; /* Максимальная ширина формы */
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .authorization-form:hover {
+        transform: scale(1.02);
+    }
+
+    .authorization-form h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease-in-out;
+    }
+
+    .form-group input:focus {
+        border-color:#FF9929; /* Highlight color */
+        outline: none; /* Remove default outline */
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .submit-button {
+        display: block;
+        width: calc(100% - 24px); /* Adjusted for padding */
+        margin-top: 10px; /* Space above the button */
+        padding: 12px;
+        background-color: #FF9929; /* Button color */
+        color: white; /* Text color */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Pointer cursor on hover */
+        font-size: 18px; /* Increased font size */
+        transition: background-color 0.3s ease-in-out; /* Smooth transition */
+    }
+
+    .submit-button:hover {
+       background-color: #e68a00; /* Darker shade on hover */
+    }
+
+    .register-link {
+       text-align: center; /* Центрировать текст ссылки регистрации */
+       margin-top: 20px; /* Отступ сверху для ссылки регистрации */
+       font-size: 14px; /* Размер шрифта для ссылки регистрации */
+    }
+
+    @media (max-width: 600px) {
+      .authorization-form {
+          padding: 20px; /* Уменьшить отступы на мобильных устройствах */
+      }
+
+      .submit-button {
+          font-size: 16px; /* Уменьшить размер шрифта кнопки на мобильных устройствах */
+      }
+
+      .register-link p {
+          font-size: 12px; /* Уменьшить размер шрифта для текста регистрации на мобильных устройствах */
+      }
+    }
+</style>
+
+{{template "footer"}}
+
+{{end}}

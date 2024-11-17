@@ -1,0 +1,115 @@
+{{define "employee_authorization_page"}}
+
+{{template "header" .}}
+
+<title>Вход в систему</title>
+<main>
+  <div class="login-container">
+      <form action="/employee_authorization_page" method="POST" class="authorization-form">
+          <h2 class="name">Вход для рекрута</h2>
+
+          <div class="form-group">
+              <label for="email">Электронная почта</label>
+              <input type="text" id="email" name="email" required placeholder="Введите email">
+          </div>
+          <div class="form-group">
+              <label for="password">Пароль</label>
+              <input type="password" id="password" name="password" required placeholder="Введите пароль">
+          </div>
+          <button type="submit" class="submit-button">Войти</button>
+      </form>
+      <div class="register-link">
+          <p> <div style ="color:black;"> Нет аккаунта? </div> <a href="/employee_registration_page">Зарегистрироваться</a></p>
+      </div>
+  </div>
+</main>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #e9ecef; /* Фоновый цвет страницы */
+    }
+
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh; /* Занять всю высоту экрана */
+    }
+
+    .login-container {
+        font-size: 16px;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 90%; /* Ширина формы на мобильных устройствах */
+        max-width: 400px; /* Максимальная ширина формы */
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .login-container:hover {
+        transform: scale(1.02);
+    }
+
+    .login-container h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-group input {
+        width: calc(100% - 20px); /* Учитываем отступы */
+        padding: 12px; /* Внутренние отступы */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box; /* Учитываем ширину границ в общей ширине */
+    }
+
+    .form-group input:focus {
+        border-color:#FF9929; /* Цвет при фокусе */
+        outline: none; /* Убираем стандартный контур */
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .submit-button {
+        display: block;
+        width: calc(100% - 24px); /* Учитываем отступы */
+        padding: 12px;
+        background-color: #FF9929; /* Цвет кнопки */
+        color: white; /* Цвет текста */
+        border: none; /* Без границы */
+        border-radius: 5px; /* Закругленные углы */
+        cursor: pointer; /* Курсор при наведении */
+        font-size: 18px; /* Размер шрифта кнопки */
+        transition: background-color 0.3s ease-in-out; /* Плавный переход цвета фона */
+    }
+
+    .submit-button:hover {
+       background-color: #e68a00; /* Темнее при наведении */
+    }
+
+    .register-link {
+       text-align: center; /* Центрируем текст ссылки регистрации */
+       margin-top: 20px; /* Отступ сверху для ссылки регистрации */
+       font-size: 14px; /* Размер шрифта для ссылки регистрации */
+    }
+</style>
+
+{{template "footer"}}
+
+{{end}}

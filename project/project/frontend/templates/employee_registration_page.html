@@ -1,0 +1,181 @@
+{{define "employee_registration_page"}}
+
+{{template "header" .}}
+
+<title>Регистрация рекрута</title>
+<main>
+  <div class="registration-container">
+      <h1 class="title">Регистрация</h1>
+      <h2 class="subtitle">Регистрация может занимать до 60 секунд, ведь тарологи очень трепетно относятся к своей работе по составлению тарологического портрета.</h2>
+
+      <form action="/employee_registration_page" method="post" class="authorization-form">
+          <div class="form-row">
+              <div class="form-group">
+                  <label for="name">Имя</label>
+                  <input type="text" name="name" id="name" placeholder="Введите имя" required class="form-control" >
+              </div>
+
+              <div class="form-group">
+                  <label for="surname">Фамилия</label>
+                  <input type="text" name="surname" id="surname" placeholder="Фамилия" required class="form-control">
+              </div>
+
+              <div class="form-group">
+                  <label for="secondname">Отчество</label>
+                  <input type="text" name="secondname" id="secondname" placeholder="Отчество" required class="form-control">
+              </div>
+
+              <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="text" name="email" id="email" placeholder="Email" required class="form-control">
+              </div>
+
+              <div class="form-group">
+                  <label for="password">Пароль</label>
+                  <input type="password" name="password" id="password" placeholder="Пароль" required class="form-control">
+              </div>
+
+              <div class="form-group">
+                  <label for="Date_birth_day">Дата рождения</label>
+                  <input type="date" name="Date_birth_day" id="Date_birth_day" required class="form-control">
+              </div>
+
+              <div class="form-group">
+                  <label for="Time_birth">Время рождения</label>
+                  <input type="time" name="Time_birth" id="Time_birth" required class="form-control">
+              </div>
+
+              <div class="form-group">
+                  <label for="City_of_birth">Город рождения</label>
+                  <input type="text" name="City_of_birth" id="City_of_birth" placeholder="Город рождения" required class="form-control">
+              </div>
+
+              <div class="form-group">
+                  <label for="Work_experience">Опыт работы</label>
+                  <input type="text" name="Work_experience" id="Work_experience" placeholder="Опыт работы (лет)" required class="form-control">
+              </div>
+
+              <div class="form-group">
+                  <label for="dropdown2">Ваша должность:</label>
+                  <select id="dropdown2" name="dropdown2" required class="form-control">
+                      <option value="" disabled selected></option>
+                      <option value="Программист">Программист</option>
+                      <option value="Экономист">Экономист</option>
+                      <!-- Добавьте другие должности при необходимости -->
+                  </select>
+              </div>
+          </div>
+
+          <button type="submit" class="submit-button">Добавить</button>
+      </form>
+  </div>
+</main>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #e9ecef; /* Фоновый цвет страницы */
+    }
+
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Выравнивание по верхнему краю */
+        width: 100%;
+        min-height: calc(100vh - 100px); /* Учитываем высоту хедера и футера */
+        padding: 20px; /* Отступы вокруг формы */
+        box-sizing: border-box; /* Учитываем отступы в ширине */
+    }
+
+
+    .registration-container {
+        font-size: 16px;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 100%; /* Ширина формы на мобильных устройствах */
+        max-width: 800px; /* Максимальная ширина формы */
+    }
+
+    .title {
+        text-align: center;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку */
+    }
+
+    .form-group {
+        flex: 1; /* Занимает равное пространство */
+        min-width: calc(33.33% - 20px); /* Минимальная ширина для трех колонок на ПК */
+        margin-bottom: 20px; /* Отступ снизу */
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-control {
+        width: calc(100% - 20px); /* Учитываем отступы */
+        padding: 12px; /* Внутренние отступы */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box; /* Учитываем ширину границ в общей ширине */
+    }
+
+    .form-control:focus {
+        border-color:#FF9929; /* Цвет при фокусе */
+        outline: none; /* Убираем стандартный контур */
+        box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .submit-button {
+        display: block;
+        width: calc(100% - 24px); /* Учитываем отступы */
+        padding: 12px;
+        background-color: #FF9929; /* Цвет кнопки */
+        color: white; /* Цвет текста */
+        border: none; /* Без границы */
+        border-radius: 5px; /* Закругленные углы */
+        cursor: pointer; /* Курсор при наведении */
+        font-size: 18px; /* Размер шрифта кнопки */
+        transition: background-color 0.3s ease-in-out; /* Плавный переход цвета фона */
+    }
+
+    .submit-button:hover {
+       background-color: #e68a00; /* Темнее при наведении */
+    }
+
+    @media (max-width: 600px) {
+      .form-group {
+          min-width: calc(50% - 20px); /* На мобильных устройствах все поля занимают две колонки */
+      }
+
+      main {
+          min-height: auto; /* Высота автоматически подстраивается под содержимое на мобильных устройствах */
+      }
+
+      .registration-container {
+          padding-left: 10px; /* Уменьшаем отступы для мобильных устройств */
+          padding-right: 10px;
+      }
+    }
+</style>
+
+{{template "footer"}}
+
+{{end}}

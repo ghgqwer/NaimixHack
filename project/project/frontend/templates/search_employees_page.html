@@ -1,0 +1,118 @@
+
+{{define "search_employees_page"}}
+
+{{template "header" .}}
+<style>
+.header-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  padding: 10px;
+  border-bottom: 2px solid #f76217;
+  transition: color 0.3s;
+}
+</style>
+
+
+  <div class="row">
+    <div class="col-12">
+      <div class="header-container col-12">
+        <h1 class="header-title">Поиск сотрудников</h1>
+      </div>
+    </div>
+      {{range .Employees}}
+
+        <div class="col-6 offset-md-3 standart_border_radius" style =" padding:20px;padding-top:10px; width:100px; height:auto; background-color:#0E6666; margin-bottom:30px;color:white;">
+          {{if eq $.Style "0"}}
+
+
+            <a href="/add_employee_to_your_company/{{.Id}}" style="color:white;">
+
+          {{else if eq $.Style "3"}}
+             <a href="/add_employee_to_your_company/{{.Id}}" style="color:white;">
+
+          {{else if eq $.Style "1"}}
+
+            <a href="/employee_profile/{{.Id}}" style="color:white;">
+
+
+
+
+
+
+          {{end}}
+
+
+          <div class = "row">
+            <div class = "col-12">
+              {{.Firstname}}  {{.Surname}}
+            </div>
+
+            <div class = "col-4">
+
+              <img class="img_for_empl standart_border_radius" src="{{.Icon_link}}" alt="альтернативный текст">
+
+            </div>
+            <div class = "col-4">
+              <div class = "row">
+                <div class = "col-12">
+                  {{.Speciality}}        Стаж работы:{{.Work_experience}}
+                </div>
+
+                <div class = "col-12 standart_border_radius adaptive_button" >
+                  <a href="/add_or_delete_from_favourites/{{.Id}}/1" >Добавить в избранное </a>
+                </div>
+
+                <div class = "col-12 adaptive_button standart_border_radius">
+                  <a href="/add_or_delete_from_favourites/{{.Id}}/0">Удалить из избранного </a>
+                </div>
+
+              </div>
+            </div>
+            <div class = "col-4">
+              <div class = "row">
+                <div class = "col-12">
+
+
+                  {{if eq .Suitable_rating "-1"}}
+                    Чтобы составить таро рейтинг в данный момент у вас нет команды с которой сравнивать
+                  {{else}}
+                    Рейтинг таро {{.Suitable_rating}}
+                  {{end}}
+                </div>
+
+                {{if eq $.Style "2"}}
+                  <div class = "col-12">
+                    <a href="/reject_apruvd_ask_to_empl/{{.Id}}/1">Принять </a>
+                    <a href="/reject_apruvd_ask_to_empl/{{.Id}}/0">Отказ</a>
+                  </div>
+                {{end}}
+                {{if ne $.Style "1"}}
+                  <div class = "col-12">
+                    *По нажатию вы отправляете офер на вступление в Вашу компанию
+                  </div>
+
+                {{end}}
+
+              </div>
+            </div>
+
+          </div>
+
+          </a>
+        </div>
+        <div class="col-3">
+        </div>
+
+      {{end}}
+
+  </div>
+{{template "footer"}}
+{{end}}

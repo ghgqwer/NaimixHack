@@ -1,0 +1,49 @@
+
+{{define "asked_to_employee"}}
+
+{{template "header" .}}
+<style>
+.header-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  padding: 10px;
+  border-bottom: 2px solid #f76217;
+  transition: color 0.3s;
+}
+</style>
+
+
+    <div class="row">
+      <div class = "col-12">
+        <div class="header-container col-12">
+          <h1 class="header-title">Поиск компаний</h1>
+        </div>
+      </div>
+
+      {{range .Corporations}}
+        <div class = "col-6 offset-md-3 standart_border_radius nav__link" style="width:100px; height:100px; background-color:#0E6666; margin-bottom:30px;color:white;">
+
+          {{if eq $.Style "1"}}
+            Компания {{.Name}} приглашает Вас на работу
+            <a href="/reject_apruvd_ask/{{.Id}}/1">Принять </a>
+            <a href="/reject_apruvd_ask/{{.Id}}/0">Отказ</a>
+          {{else}}
+            {{.Name}}
+            <a href="/add_company_to_wanted_company/{{.Id}}">Отправить заявку</a>
+          {{end}}
+        </div>
+        <div class="col-3">
+        </div>
+      {{end}}
+    </div>
+
+{{template "footer"}}
+{{end}}
