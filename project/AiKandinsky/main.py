@@ -5,8 +5,8 @@ import base64
 import os
 import argparse
 
-api_key = "5867D08E3C13ED7770FFE0C88CFEF03F"
-secret_key = "9A760F7EBD2A1D7753DBE5C6C1654FCF"
+api_key = ""
+secret_key = ""
 
 class Text2ImageAPI:
     def __init__(self, url, api_key, secret_key):
